@@ -100,4 +100,5 @@ mongoose.connect(process.env.MONGODB_URI)
   })
   .catch((err) => {
     console.error('Failed to connect to MongoDB:', err);
+    process.exit(1); // Exit the process so Render knows it failed instead of hanging
   });
