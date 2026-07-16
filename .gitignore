@@ -1,0 +1,37 @@
+# Node dependencies
+node_modules/
+npm-debug.log
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# Build/output directories
+dist/
+build/
+.output/
+.vercel/
+
+# Editor/OS specific
+.vscode/
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Uploads or temporary data
+server/uploads/
+server/tessdata/
+*.log
+
+# Temp files for OCR
+ocr_service/temp_*
+
+# Ignore PDF files
+*.pdf
