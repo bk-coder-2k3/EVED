@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api', // During dev, use explicit port if proxy fails
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api', // Use env var if available, otherwise fallback to local
 });
 
 export default api;
