@@ -19,7 +19,9 @@ class OCRService {
       form.append('file', fs.createReadStream(imagePath));
 
       // Make request to the deployed Python FastAPI server or local
-      const ocrBaseUrl = process.env.OCR_SERVICE_URL || 'http://127.0.0.1:8000';
+      let ocrBaseUrl = process.env.OCR_SERVICE_URL || 'http://127.0.0.1:8000';
+      if (ocrBaseUrl.endsWith('/')) ocrBaseUrl = ocrBaseUrl.slice(0, -1);
+      
       const response = await axios.post(`${ocrBaseUrl}/extract`, form, {
         headers: {
           ...form.getHeaders()
