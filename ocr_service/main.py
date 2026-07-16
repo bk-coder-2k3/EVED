@@ -17,7 +17,7 @@ async def extract_text(file: UploadFile = File(...)):
         
     try:
         # Run inference
-        result = ocr.ocr(temp_path, cls=True)
+        result = ocr.ocr(temp_path)
         
         text_lines = []
         if result and result[0]:
