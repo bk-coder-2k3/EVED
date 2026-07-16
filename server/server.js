@@ -50,7 +50,13 @@ const startPythonService = () => {
   });
 };
 
-startPythonService();
+// Only start the local Python service if we're not in production.
+// In production (e.g. Render), the OCR service will run as a separate Web Service.
+if (process.env.NODE_ENV !== 'production') {
+  startPythonService();
+} else {
+  console.log('[OCR Service] Running in production mode. Assuming external Python service.');
+}
 
 // Initialize app
 const app = express();
