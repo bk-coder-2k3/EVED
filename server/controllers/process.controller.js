@@ -75,7 +75,8 @@ exports.processPDF = async (req, res) => {
         }
 
         const newVoters = [];
-        const concurrencyLimit = isAiMode ? 10 : 5; // Process up to 10 cards concurrently in AI mode to batch requests
+        const concurrencyLimit = 1; // Process 1 card at a time to prevent 502s from OCR service overload on Free Tier
+        const baseUrl = process.env.BACKEND_URL || '';
 
         for (let i = 0; i < tasks.length; i += concurrencyLimit) {
           const chunk = tasks.slice(i, i + concurrencyLimit);
@@ -113,8 +114,8 @@ exports.processPDF = async (req, res) => {
                  if (parsedData.epicNumber || parsedData.name) {
                    return {
                      ...parsedData,
-                     photo: `/uploads/photos/${job.pdfName}_page${pIndex}/${r.photoFilename}`,
-                     voterCardImage: `/uploads/cards/${job.pdfName}_page${pIndex}/${r.cardFilename}`,
+                     photo: `${baseUrl}/uploads/photos/${job.pdfName}_page${pIndex}/${r.photoFilename}`,
+                     voterCardImage: `${baseUrl}/uploads/cards/${job.pdfName}_page${pIndex}/${r.cardFilename}`,
                      pdfName: job.pdfName,
                      pageNumber: pIndex + 1
                    };
@@ -129,8 +130,8 @@ exports.processPDF = async (req, res) => {
                  if (parsedData.epicNumber || parsedData.name) {
                    return {
                      ...parsedData,
-                     photo: `/uploads/photos/${job.pdfName}_page${pIndex}/${r.photoFilename}`,
-                     voterCardImage: `/uploads/cards/${job.pdfName}_page${pIndex}/${r.cardFilename}`,
+                     photo: `${baseUrl}/uploads/photos/${job.pdfName}_page${pIndex}/${r.photoFilename}`,
+                     voterCardImage: `${baseUrl}/uploads/cards/${job.pdfName}_page${pIndex}/${r.cardFilename}`,
                      pdfName: job.pdfName,
                      pageNumber: pIndex + 1
                    };
@@ -145,8 +146,8 @@ exports.processPDF = async (req, res) => {
                if (parsedData.epicNumber || parsedData.name) {
                  return {
                    ...parsedData,
-                   photo: `/uploads/photos/${job.pdfName}_page${pIndex}/${r.photoFilename}`,
-                   voterCardImage: `/uploads/cards/${job.pdfName}_page${pIndex}/${r.cardFilename}`,
+                   photo: `${baseUrl}/uploads/photos/${job.pdfName}_page${pIndex}/${r.photoFilename}`,
+                   voterCardImage: `${baseUrl}/uploads/cards/${job.pdfName}_page${pIndex}/${r.cardFilename}`,
                    pdfName: job.pdfName,
                    pageNumber: pIndex + 1
                  };
