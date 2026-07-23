@@ -9,11 +9,15 @@ const os = require('os');
 
 // Start Python OCR Microservice automatically
 const startPythonService = () => {
+  if (process.env.NODE_ENV === 'production') {
+    console.log('[OCR Service] Production mode detected. Skipping local Python OCR spawn.');
+    console.log('[OCR Service] The Node server will communicate with the external OCR service via OCR_SERVICE_URL.');
+    return;
+  }
+
   const pythonExecutable = os.platform() === 'win32'
     ? path.join(__dirname, '..', 'ocr_service', 'venv', 'Scripts', 'python.exe')
     : path.join(__dirname, '..', 'ocr_service', 'venv', 'bin', 'python');
-  
-  const ocrDir = path.join(__dirname, '..', 'ocr_service');
 
   if (!fs.existsSync(pythonExecutable)) {
     console.error('[OCR Service] Python virtual environment not found. Please set it up in the ocr_service folder.');
@@ -21,6 +25,8 @@ const startPythonService = () => {
   }
 
   console.log(`[OCR Service] Starting...`);
+  const ocrDir = path.join(__dirname, '..', 'ocr_service');
+
   const pythonProcess = spawn(pythonExecutable, ['main.py'], { 
     cwd: ocrDir,
     env: {
