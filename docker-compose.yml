@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  ocr:
+    build:
+      context: ./ocr_service
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    # Use restart policy to ensure it comes back if it crashes
+
+  backend:
+    build:
+      context: ./server
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - OCR_SERVICE_URL=http://ocr:8000
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - MONGODB_URI=${MONGODB_URI}
+      - BACKEND_URL=http://<YOUR_EC2_PUBLIC_IP>:5000
+    depends_on:
+      - ocr
+    restart: unless-stopped
