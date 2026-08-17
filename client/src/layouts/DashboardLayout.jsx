@@ -1,5 +1,7 @@
-import { Outlet, NavLink } from 'react-router-dom';
-import { LayoutDashboard, FileUp, List, Users, Settings, Database } from 'lucide-react';
+import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import { LayoutDashboard, FileUp, List, Users, Settings, Database, UserPlus, LogOut } from 'lucide-react';
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 
 const navItems = [
   { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
@@ -8,9 +10,18 @@ const navItems = [
   { name: 'Imported PDFs', path: '/pdfs', icon: Database },
   { name: 'Voter List', path: '/voters', icon: Users },
   { name: 'Template Editor', path: '/settings', icon: Settings },
+  { name: 'Create Employee', path: '/create-employee', icon: UserPlus },
 ];
 
 export default function DashboardLayout() {
+  const { logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
   return (
     <div className="flex h-screen bg-slate-50 dark:bg-slate-900 transition-colors">
       {/* Sidebar */}
@@ -38,6 +49,15 @@ export default function DashboardLayout() {
             </NavLink>
           ))}
         </nav>
+        <div className="p-4 border-t border-slate-200 dark:border-slate-700">
+          <button 
+            onClick={handleLogout}
+            className="flex items-center w-full px-4 py-3 rounded-xl transition-all duration-200 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
+          >
+            <LogOut className="w-5 h-5 mr-3" />
+            Logout
+          </button>
+        </div>
       </aside>
 
       {/* Main Content */}
