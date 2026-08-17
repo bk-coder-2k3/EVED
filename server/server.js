@@ -104,23 +104,7 @@ mongoose.connect(process.env.MONGODB_URI)
   .then(async () => {
     console.log('Connected to MongoDB successfully.');
     
-    // Seed Admin User
-    try {
-      const adminExists = await User.findOne({ role: 'admin' });
-      if (!adminExists) {
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash('123456', salt);
-        await User.create({
-          email: 'admin@mail.com',
-          mobile: '9876543210',
-          password: hashedPassword,
-          role: 'admin'
-        });
-        console.log('Default Admin user created successfully.');
-      }
-    } catch (err) {
-      console.error('Error seeding admin user:', err);
-    }
+
 
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
