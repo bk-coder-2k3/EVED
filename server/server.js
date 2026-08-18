@@ -27,7 +27,7 @@ const startPythonService = () => {
   console.log(`[OCR Service] Starting...`);
   const ocrDir = path.join(__dirname, '..', 'ocr_service');
 
-  const pythonProcess = spawn(pythonExecutable, ['main.py'], { 
+  const pythonProcess = spawn(pythonExecutable, ['main.py'], {
     cwd: ocrDir,
     env: {
       ...process.env,
@@ -74,7 +74,9 @@ app.use(cors({
     'http://localhost:5173',
     'http://localhost:5000',
     'http://3.108.65.174',
-    'http://3.108.65.174:80'
+    'http://3.108.65.174:80',
+    'http://3.110.189.76',
+    'http://3.110.189.76:80'
   ],
   credentials: true
 }));
@@ -111,7 +113,7 @@ const bcrypt = require('bcryptjs');
 mongoose.connect(process.env.MONGODB_URI)
   .then(async () => {
     console.log('Connected to MongoDB successfully.');
-    
+
 
 
     app.listen(PORT, () => {
