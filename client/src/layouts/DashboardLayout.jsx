@@ -5,12 +5,11 @@ import { AuthContext } from '../context/AuthContext';
 
 const navItems = [
   { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
-  { name: 'Upload PDF', path: '/upload', icon: FileUp },
-  { name: 'Processing Queue', path: '/queue', icon: List },
-  { name: 'Imported PDFs', path: '/pdfs', icon: Database },
+  { name: 'Data Extraction', path: '/extraction', icon: Database },
   { name: 'Voter List', path: '/voters', icon: Users },
-  { name: 'Template Editor', path: '/settings', icon: Settings },
-  { name: 'Create Employee', path: '/create-employee', icon: UserPlus },
+  // { name: 'Template Editor', path: '/settings', icon: Settings },
+  { name: 'Employees', path: '/employees', icon: UserPlus },
+  { name: 'Hierarchy', path: '/hierarchy', icon: Database },
 ];
 
 export default function DashboardLayout() {

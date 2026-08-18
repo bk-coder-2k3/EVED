@@ -27,27 +27,44 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden">
+      {/* Background decoration to match the premium theme */}
+      <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-indigo-900/20 via-slate-900 to-slate-900 -z-10"></div>
+      
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Sign in to your account
+        <div className="flex justify-center mb-6">
+          {/* Optional: Add a logo icon here if you have one, or just text */}
+          <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-teal-400 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-500/30">
+            <User className="w-8 h-8 text-white" />
+          </div>
+        </div>
+        <h2 className="text-center text-3xl font-extrabold text-white tracking-tight">
+          Welcome Back
         </h2>
+        <p className="mt-2 text-center text-sm text-slate-400">
+          Sign in to access the EVED portal
+        </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+        <div className="glass-panel py-8 px-4 sm:px-10 border border-slate-700/50 relative overflow-hidden">
+          {/* Subtle top border highlight */}
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 to-teal-400"></div>
+          
           <form className="space-y-6" onSubmit={handleLogin}>
-            {error && <div className="text-red-500 text-sm text-center">{error}</div>}
+            {error && <div className="text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg p-3 text-sm text-center font-medium">{error}</div>}
+            
             <div>
-              <label className="block text-sm font-medium text-gray-700">Email or Mobile Number</label>
-              <div className="mt-1 relative rounded-md shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <User className="h-5 w-5 text-gray-400" />
+              <label className="block text-sm font-medium text-slate-300 mb-1">Email or Mobile Number</label>
+              <div className="mt-1 relative rounded-xl shadow-sm">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <User className="h-5 w-5 text-slate-500" />
                 </div>
                 <input
                   type="text"
                   required
-                  className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md py-2 border"
+                  className="input-field pl-11 w-full"
+                  placeholder="Enter your identifier"
                   value={identifier}
                   onChange={(e) => setIdentifier(e.target.value)}
                 />
@@ -55,27 +72,28 @@ const Login = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">Password</label>
-              <div className="mt-1 relative rounded-md shadow-sm">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
+              <label className="block text-sm font-medium text-slate-300 mb-1">Password</label>
+              <div className="mt-1 relative rounded-xl shadow-sm">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <Lock className="h-5 w-5 text-slate-500" />
                 </div>
                 <input
                   type="password"
                   required
-                  className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md py-2 border"
+                  className="input-field pl-11 w-full"
+                  placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
             </div>
 
-            <div>
+            <div className="pt-2">
               <button
                 type="submit"
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="btn-primary w-full py-3 text-base font-semibold shadow-lg shadow-indigo-500/25"
               >
-                Sign in
+                Sign in securely
               </button>
             </div>
           </form>

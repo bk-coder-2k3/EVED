@@ -26,9 +26,12 @@ class ParserService {
       // Common OCR label misspellings
       .replace(/Nane/gi, 'Name')
       .replace(/Mame/gi, 'Name')
+      .replace(/N ame/gi, 'Name')
       .replace(/Elector.*?s/gi, "Elector's")
       .replace(/Fsther/gi, 'Father')
+      .replace(/F ather/gi, 'Father')
       .replace(/Hushend/gi, 'Husband')
+      .replace(/Hus[a-z]*d/gi, 'Husband')
       .replace(/Hous[e\s]*No/gi, 'House No')
       .replace(/H0use/gi, 'House')
       .replace(/H\.?\s*No\.?/gi, 'House No')
@@ -104,15 +107,45 @@ class ParserService {
       }
     }
 
+    // 5th Priority: Try stripping all spaces from the text entirely and checking for the 10 char EPIC pattern
+    // This catches cases where OCR read "Z Q O 4 0 0 2 9" with huge spaces
+    if (!extracted) {
+      const noSpaceText = text.replace(/\s+/g, '');
+      const noSpaceMatch = noSpaceText.match(/[A-Z]{2,4}[0-9]{6,8}/i);
+      if (noSpaceMatch) extracted = noSpaceMatch[0].toUpperCase();
+    }
+
+    // 6th Priority: The OCR completely hallucinated letters as numbers (e.g. ZQO -> 200). 
+    // Look for any standalone 10-character string (Voter Cards don't have phone numbers).
+    if (!extracted) {
+      for (const word of words) {
+        const cleanWord = word.replace(/[^A-Z0-9]/gi, '');
+        if (cleanWord.length === 10) {
+          extracted = word.toUpperCase();
+          break;
+        }
+      }
+    }
+
     return this.cleanEpic(extracted);
   }
 
   extractName(text) {
     // Negative lookbehind: Ensure "Name" is not preceded by Father's, Husband's, etc.
-    const regex = /(?<!(?:Father'?s|Husband'?s|Mother'?s|Wife'?s|Fathers|Husbands|Mothers|Wifes)\s*)(?:Name|Elector'?s Name)\s*[:\-\.]?\s*(.+?)\s*(?:Father|Husband|Mother|Wife|House|Age|Photo|Gender|$)/i;
+    const regex = /(?<!(?:Father|Husband|Mother|Wife|Fathers|Husbands|Mothers|Wifes)\s*)(?:Name|Elector'?s Name)\s*[:\-\.]?\s*(.+?)\s*(?:Father|Husband|Mother|Wife|House|Age|Photo|Gender|$)/i;
     const match = text.match(regex);
     if (match && match[1]) {
       return this.cleanValue(match[1]);
+    }
+    
+    // Fallback if negative lookbehind fails due to OCR hallucination
+    const fallbackRegex = /Name\s*[:\-\.]?\s*(.+?)\s*(?:Father|Husband|Mother|Wife|House|Age|Photo|Gender|$)/i;
+    const fallbackMatch = text.match(fallbackRegex);
+    if (fallbackMatch && fallbackMatch[1]) {
+       let val = this.cleanValue(fallbackMatch[1]);
+       if (!val.toLowerCase().includes('husband') && !val.toLowerCase().includes('father')) {
+           return val;
+       }
     }
     return '';
   }
@@ -127,7 +160,7 @@ class ParserService {
   }
 
   extractRelationName(text) {
-    const match = text.match(/(?:Father'?s|Husband'?s|Mother'?s|Wife'?s|Fathers|Husbands|Mothers|Wifes)\s*Name\s*[:\-\.]?\s*(.+?)\s*(?:House|Age|Photo|Gender|$)/i);
+    const match = text.match(/(?:Father'?s|Husband'?s|Mother'?s|Wife'?s|Fathers|Husbands|Mothers|Wifes|Father|Husband)\s*Name\s*[:\-\.]?\s*(.+?)\s*(?:House|Age|Photo|Gender|$)/i);
     if (match && match[1]) {
       return this.cleanValue(match[1]);
     }
@@ -147,9 +180,10 @@ class ParserService {
   }
 
   extractAge(text) {
-    const match = text.match(/Age\s*[:\-\.,]?\s*(\d{2})/i);
+    const match = text.match(/Age\s*[:\-\.,]?\s*([0-9OIlZSB]{2})/i);
     if (match && match[1]) {
-      return parseInt(match[1], 10);
+      let ageStr = match[1].replace(/O/gi, '0').replace(/I/gi, '1').replace(/l/gi, '1').replace(/Z/gi, '2').replace(/S/gi, '5').replace(/B/gi, '8');
+      return parseInt(ageStr, 10);
     }
     return null;
   }

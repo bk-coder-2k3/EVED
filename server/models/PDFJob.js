@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const pdfJobSchema = new mongoose.Schema({
   pdfName: { type: String, required: true },
   originalName: { type: String, required: true },
+  locationId: { type: mongoose.Schema.Types.ObjectId, ref: 'Location' },
   status: { 
     type: String, 
     enum: ['pending', 'processing', 'completed', 'failed'],

@@ -3,15 +3,14 @@ import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import DashboardLayout from './layouts/DashboardLayout';
 import Dashboard from './pages/Dashboard';
-import UploadPDF from './pages/UploadPDF';
-import ProcessingQueue from './pages/ProcessingQueue';
-import ImportedPDFs from './pages/ImportedPDFs';
+import DataExtraction from './pages/DataExtraction';
 import VoterList from './pages/VoterList';
 import VoterDetails from './pages/VoterDetails';
 import TemplateEditor from './pages/TemplateEditor';
 import Login from './pages/Login';
-import CreateEmployee from './pages/CreateEmployee';
+import EmployeeManagement from './pages/EmployeeManagement';
 import EmployeeDashboard from './pages/EmployeeDashboard';
+import HierarchyManager from './pages/HierarchyManager';
 
 function App() {
   return (
@@ -25,13 +24,12 @@ function App() {
             <Route path="/" element={<DashboardLayout />}>
               <Route index element={<Navigate to="/dashboard" replace />} />
               <Route path="dashboard" element={<Dashboard />} />
-              <Route path="upload" element={<UploadPDF />} />
-              <Route path="queue" element={<ProcessingQueue />} />
-              <Route path="pdfs" element={<ImportedPDFs />} />
+              <Route path="extraction" element={<DataExtraction />} />
               <Route path="voters" element={<VoterList />} />
               <Route path="voters/:id" element={<VoterDetails />} />
-              <Route path="settings" element={<TemplateEditor />} />
-              <Route path="create-employee" element={<CreateEmployee />} />
+              {/* <Route path="settings" element={<TemplateEditor />} /> */}
+              <Route path="employees" element={<EmployeeManagement />} />
+              <Route path="hierarchy" element={<HierarchyManager />} />
             </Route>
           </Route>
 

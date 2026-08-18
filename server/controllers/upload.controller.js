@@ -39,6 +39,7 @@ exports.uploadPDF = (req, res) => {
       const newJob = new PDFJob({
         pdfName: req.file.filename,
         originalName: req.file.originalname,
+        locationId: req.body.locationId || null,
         status: 'pending'
       });
       await newJob.save();

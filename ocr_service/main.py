@@ -16,8 +16,9 @@ async def extract_text(file: UploadFile = File(...)):
         shutil.copyfileobj(file.file, buffer)
         
     try:
-        # Run inference
+        # Run inference directly on raw image
         result = ocr.ocr(temp_path)
+
         
         text_lines = []
         if result and result[0]:

@@ -117,14 +117,23 @@ exports.processPDF = async (req, res) => {
                      photo: `${baseUrl}/uploads/photos/${job.pdfName}_page${pIndex}/${r.photoFilename}`,
                      voterCardImage: `${baseUrl}/uploads/cards/${job.pdfName}_page${pIndex}/${r.cardFilename}`,
                      pdfName: job.pdfName,
-                     pageNumber: pIndex + 1
+                     pageNumber: pIndex + 1,
+                     locationId: job.locationId
                    };
                  }
                  return null;
               });
             } catch (aiErr) {
+              const errMsg = (aiErr.message || '').toLowerCase();
+              if (errMsg.includes('429') || errMsg.includes('quota') || errMsg.includes('limit') || errMsg.includes('too many requests') || errMsg.includes('exhausted')) {
+                console.error('AI Quota exceeded. Aborting job...', aiErr);
+                const fatalErr = new Error('AI API Limit Reached. Processing stopped.');
+                fatalErr.isFatal = true;
+                throw fatalErr;
+              }
+
               console.error('AI Parsing failed for chunk, falling back to local OCR', aiErr);
-              // Fallback to local if AI fails (e.g. rate limit)
+              // Fallback to local if AI fails for non-quota reasons (e.g. format error)
               parsedChunk = validResults.map(r => {
                  const parsedData = parserService.parseVoterText(r.ocrText);
                  if (parsedData.epicNumber || parsedData.name) {
@@ -133,7 +142,8 @@ exports.processPDF = async (req, res) => {
                      photo: `${baseUrl}/uploads/photos/${job.pdfName}_page${pIndex}/${r.photoFilename}`,
                      voterCardImage: `${baseUrl}/uploads/cards/${job.pdfName}_page${pIndex}/${r.cardFilename}`,
                      pdfName: job.pdfName,
-                     pageNumber: pIndex + 1
+                     pageNumber: pIndex + 1,
+                     locationId: job.locationId
                    };
                  }
                  return null;
@@ -149,7 +159,8 @@ exports.processPDF = async (req, res) => {
                    photo: `${baseUrl}/uploads/photos/${job.pdfName}_page${pIndex}/${r.photoFilename}`,
                    voterCardImage: `${baseUrl}/uploads/cards/${job.pdfName}_page${pIndex}/${r.cardFilename}`,
                    pdfName: job.pdfName,
-                   pageNumber: pIndex + 1
+                   pageNumber: pIndex + 1,
+                   locationId: job.locationId
                  };
                }
                return null;
@@ -170,6 +181,9 @@ exports.processPDF = async (req, res) => {
         }
       } catch (err) {
         console.error(`Error processing page ${pIndex + 1}:`, err);
+        if (err.isFatal) {
+          throw err; // Break out of the page processing loop to abort the whole job
+        }
         pageFailed = true;
         failedPages.push(pIndex + 1);
       }
