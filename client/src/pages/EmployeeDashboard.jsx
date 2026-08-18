@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { LogOut, Search, Edit, MapPin, X, Check, Users } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import api from '../api';
+import api, { getImageUrl } from '../api';
 
 const EmployeeDashboard = () => {
   const { user, logout } = useContext(AuthContext);
@@ -218,7 +218,7 @@ const EmployeeDashboard = () => {
                     <tr key={voter._id} className="hover:bg-slate-50/50 dark:hover:bg-slate-700/30 transition-colors">
                       <td className="px-4 py-2">
                         {voter.photo ? (
-                          <img src={`http://localhost:5000${voter.photo}`} alt="voter" className="w-10 h-12 object-cover rounded-md shadow-sm bg-slate-200" />
+                          <img src={getImageUrl(voter.photo)} alt="voter" className="w-10 h-12 object-cover rounded-md shadow-sm bg-slate-200" />
                         ) : (
                           <div className="w-10 h-12 bg-slate-200 dark:bg-slate-600 rounded-md"></div>
                         )}
@@ -264,7 +264,7 @@ const EmployeeDashboard = () => {
               <div className="flex items-center">
                 <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white dark:border-slate-700 shadow-sm mr-4">
                   {selectedVoter.photo ? (
-                     <img src={`http://localhost:5000${selectedVoter.photo}`} alt="voter" className="w-full h-full object-cover" />
+                     <img src={getImageUrl(selectedVoter.photo)} alt="voter" className="w-full h-full object-cover" />
                   ) : (
                      <div className="w-full h-full bg-slate-200 dark:bg-slate-700"></div>
                   )}

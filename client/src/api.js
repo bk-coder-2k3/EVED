@@ -1,9 +1,17 @@
 import axios from 'axios';
 
+const baseURL = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '/api' : 'http://localhost:5000/api');
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api', // Use env var if available, otherwise fallback to local
+  baseURL,
 });
 
+export const getImageUrl = (path) => {
+  if (!path) return '';
+  if (path.startsWith('http')) return path;
+  const base = import.meta.env.PROD ? '' : 'http://localhost:5000';
+  return `${base}${path.startsWith('/') ? path : '/' + path}`;
+};
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
   if (token) {

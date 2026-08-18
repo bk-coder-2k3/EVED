@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import api from '../api';
+import api, { getImageUrl } from '../api';
 import { Search, ChevronLeft, ChevronRight, Edit, MapPin, X, Check, ArrowUpDown, ArrowUp, ArrowDown, Filter } from 'lucide-react';
 
 export default function VoterList() {
@@ -307,11 +307,11 @@ export default function VoterList() {
                       onChange={() => toggleSelectVoter(voter._id)}
                     />
                   </td>
-                  <td className="px-4 py-2">
+                  <td className="px-6 py-4 border-b border-slate-100 dark:border-slate-700/50">
                     {voter.photo ? (
-                      <img src={`http://localhost:5000${voter.photo}`} alt="voter" className="w-10 h-12 object-cover rounded-md shadow-sm bg-slate-200" />
+                      <img src={getImageUrl(voter.photo)} alt="voter" className="w-10 h-12 object-cover rounded-md shadow-sm bg-slate-200" />
                     ) : (
-                       <div className="w-10 h-12 bg-slate-200 dark:bg-slate-700 rounded-md"></div>
+                      <div className="w-10 h-12 bg-slate-200 dark:bg-slate-700 rounded-md"></div>
                     )}
                   </td>
                   <td className="px-4 py-2 font-medium">{voter.serialNumber}</td>
