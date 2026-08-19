@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import api, { getImageUrl } from '../api';
+import api, { getImageUrl } from '../../api/api';
 import { Save, ArrowLeft, Trash2 } from 'lucide-react';
 
 export default function VoterDetails() {
@@ -67,7 +67,7 @@ export default function VoterDetails() {
         
         {/* Editor Form */}
         <div className="glass-panel p-8 space-y-4">
-           <h2 className="text-2xl font-bold text-slate-800 dark:text-white border-b pb-4 mb-4">Edit Extracted Data</h2>
+           <h2 className="text-2xl font-bold text-slate-800 border-b pb-4 mb-4">Edit Extracted Data</h2>
            
            <div className="grid grid-cols-2 gap-4">
              <div>
@@ -123,7 +123,7 @@ export default function VoterDetails() {
         </div>
 
         {/* Source Image Viewer */}
-        <div className="glass-panel p-8 bg-slate-100 dark:bg-slate-800 flex flex-col items-center">
+        <div className="glass-panel p-8 bg-slate-100 flex flex-col items-center">
            <h3 className="font-semibold text-slate-500 mb-4 uppercase tracking-wider text-sm">Source Image Reference</h3>
            <div className="w-full max-w-sm rounded-xl overflow-hidden shadow-lg border-4 border-white mb-6">
              <img src={getImageUrl(voter.voterCardImage)} alt="Full Voter Card" className="w-full h-auto" />

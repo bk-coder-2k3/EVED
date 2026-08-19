@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import api from '../api';
+import api from '../../api/api';
 import { Save } from 'lucide-react';
 
 export default function TemplateEditor() {
@@ -53,7 +53,7 @@ export default function TemplateEditor() {
     <div className="max-w-5xl mx-auto pb-10">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Grid Template Editor</h1>
+          <h1 className="text-3xl font-bold text-slate-900 ">Grid Template Editor</h1>
           <p className="text-slate-500 mt-1">Define precise cropping coordinates for Electoral Rolls.</p>
         </div>
         <button onClick={handleSave} className="btn-primary flex items-center">
@@ -68,7 +68,7 @@ export default function TemplateEditor() {
         {/* Controls */}
         <div className="lg:col-span-1 space-y-6">
           <div className="glass-panel p-6">
-            <h3 className="font-semibold text-lg mb-4 text-slate-800 dark:text-white">Basic Info</h3>
+            <h3 className="font-semibold text-lg mb-4 text-slate-800 ">Basic Info</h3>
             <label className="block text-sm mb-1 text-slate-600">Template Name</label>
             <input type="text" name="name" value={config.name} onChange={handleChange} className="input-field mb-4" />
             <label className="flex items-center text-sm text-slate-600">
@@ -78,7 +78,7 @@ export default function TemplateEditor() {
           </div>
 
           <div className="glass-panel p-6">
-            <h3 className="font-semibold text-lg mb-4 text-slate-800 dark:text-white">Grid Structure</h3>
+            <h3 className="font-semibold text-lg mb-4 text-slate-800 ">Grid Structure</h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm mb-1 text-slate-600">Columns</label>
@@ -100,7 +100,7 @@ export default function TemplateEditor() {
           </div>
 
           <div className="glass-panel p-6">
-            <h3 className="font-semibold text-lg mb-4 text-slate-800 dark:text-white">Offsets & Margins</h3>
+            <h3 className="font-semibold text-lg mb-4 text-slate-800 ">Offsets & Margins</h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm mb-1 text-slate-600">Left Margin</label>
@@ -122,7 +122,7 @@ export default function TemplateEditor() {
           </div>
           
           <div className="glass-panel p-6">
-            <h3 className="font-semibold text-lg mb-4 text-slate-800 dark:text-white">Photo Crop Box (Relative %)</h3>
+            <h3 className="font-semibold text-lg mb-4 text-slate-800 ">Photo Crop Box (Relative %)</h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm mb-1 text-slate-600">X Offset %</label>
@@ -146,7 +146,7 @@ export default function TemplateEditor() {
 
         {/* Visualizer */}
         <div className="lg:col-span-2">
-          <div className="glass-panel p-6 h-[800px] overflow-auto bg-slate-100 dark:bg-slate-800">
+          <div className="glass-panel p-6 h-[800px] overflow-auto bg-slate-100 ">
             {/* We draw a simulated grid based on parameters */}
             <h3 className="font-medium text-slate-500 mb-4 text-center">Interactive Grid Preview (Scale 1:3 for visualization)</h3>
             <div 

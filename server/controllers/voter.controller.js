@@ -118,7 +118,7 @@ exports.getAssignedVoters = async (req, res) => {
       ]
     };
 
-    const voters = await Voter.find(query).sort({ serialNumber: 1 });
+    const voters = await Voter.find(query).populate('locationId', 'village').sort({ serialNumber: 1 });
     res.status(200).json(voters);
   } catch (error) {
     res.status(500).json({ error: error.message });

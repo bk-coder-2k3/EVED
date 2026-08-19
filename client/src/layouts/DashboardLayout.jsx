@@ -1,20 +1,20 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, FileUp, List, Users, Settings, Database, UserPlus, LogOut } from 'lucide-react';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 
 const navItems = [
-  { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
-  { name: 'Data Extraction', path: '/extraction', icon: Database },
-  { name: 'Voter List', path: '/voters', icon: Users },
-  // { name: 'Template Editor', path: '/settings', icon: Settings },
-  { name: 'Employees', path: '/employees', icon: UserPlus },
-  { name: 'Hierarchy', path: '/hierarchy', icon: Database },
+  { name: 'Dashboard', path: '/dashboard', icon: 'dashboard' },
+  { name: 'Voter Data', path: '/voters', icon: 'how_to_reg' },
+  { name: 'PDF Extraction', path: '/extraction', icon: 'picture_as_pdf' },
+  { name: 'Hierarchy', path: '/hierarchy', icon: 'account_tree' },
+  { name: 'Employees', path: '/employees', icon: 'badge' }
 ];
 
 export default function DashboardLayout() {
-  const { logout } = useContext(AuthContext);
+  const { logout, user } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -22,52 +22,116 @@ export default function DashboardLayout() {
   };
 
   return (
-    <div className="flex h-screen bg-slate-50 dark:bg-slate-900 transition-colors">
-      {/* Sidebar */}
-      <aside className="w-64 glass-panel m-4 flex flex-col shadow-2xl z-10 hidden md:flex">
-        <div className="p-6 border-b border-slate-200 dark:border-slate-700">
-          <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-indigo-600 dark:from-primary-400 dark:to-indigo-400">
-            PDF Voter Extractor
-          </h1>
+    <div className="bg-background text-on-background font-body-md antialiased overflow-hidden flex h-screen w-full">
+      {/* Mobile Backdrop */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 md:hidden backdrop-blur-sm transition-opacity" 
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
+      {/* SideNavBar */}
+      <aside className={`flex flex-col h-screen fixed left-0 top-0 overflow-y-auto w-sidebar-width z-50 bg-primary-container text-primary-fixed-dim font-body-md shadow-sm docked border-r border-outline-variant/20 transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
+        {/* Header */}
+        <div className="h-16 flex items-center px-6 mb-6 mt-4">
+          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center mr-3 shadow-sm">
+            <span className="material-symbols-outlined text-on-primary icon-fill text-[18px]">how_to_vote</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="font-headline-lg text-headline-lg font-bold text-on-primary leading-none tracking-tight">EVED</span>
+            <span className="text-[10px] uppercase tracking-wider text-on-primary-container opacity-80 mt-1">Electoral Management</span>
+          </div>
         </div>
-        <nav className="flex-1 overflow-y-auto p-4 space-y-2">
+
+        {/* Navigation Tabs */}
+        <nav className="flex-1 px-3 space-y-1">
           {navItems.map((item) => (
             <NavLink
               key={item.name}
               to={item.path}
+              onClick={() => setIsMobileMenuOpen(false)}
               className={({ isActive }) =>
-                `flex items-center px-4 py-3 rounded-xl transition-all duration-200 ${
+                `flex items-center px-3 py-2.5 rounded-lg transition-colors font-medium ml-1 ${
                   isActive
-                    ? 'bg-primary-50 text-primary-600 dark:bg-primary-900/30 dark:text-primary-400 font-semibold shadow-sm'
-                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
+                    ? 'border-l-4 border-primary bg-secondary-container/10 text-on-primary font-bold hover:bg-primary/20 scale-95 duration-150'
+                    : 'text-on-secondary-container/70 hover:bg-primary/20'
                 }`
               }
             >
-              <item.icon className="w-5 h-5 mr-3" />
+              <span className={`material-symbols-outlined mr-3 text-[20px] ${true /* make logic if active later */ ? 'icon-fill' : ''}`}>{item.icon}</span>
               {item.name}
             </NavLink>
           ))}
         </nav>
-        <div className="p-4 border-t border-slate-200 dark:border-slate-700">
-          <button 
-            onClick={handleLogout}
-            className="flex items-center w-full px-4 py-3 rounded-xl transition-all duration-200 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
-          >
-            <LogOut className="w-5 h-5 mr-3" />
-            Logout
-          </button>
-        </div>
+
+
       </aside>
 
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col h-full overflow-hidden">
-        <header className="h-16 flex items-center justify-between px-8 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm border-b border-slate-200 dark:border-slate-800">
-          <h2 className="text-xl font-semibold text-slate-800 dark:text-slate-100">Control Panel</h2>
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col h-screen min-w-0 md:ml-sidebar-width overflow-y-auto bg-background">
+        {/* TopNavBar */}
+        <header className="flex justify-between md:justify-end items-center w-full py-4 px-container-padding sticky top-0 z-40 bg-surface/90 backdrop-blur-md text-on-surface font-body-sm shadow-sm border-b border-outline-variant">
+          
+          {/* Hamburger Menu (Mobile Only) */}
+          <button 
+            className="md:hidden p-2 -ml-2 rounded-full text-on-surface-variant hover:bg-surface-container transition-colors"
+            onClick={() => setIsMobileMenuOpen(true)}
+          >
+            <span className="material-symbols-outlined">menu</span>
+          </button>
+
+
+          {/* Right: Actions */}
+          <div className="flex items-center gap-5">
+            <div className="relative">
+              <button 
+                onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
+                className={`flex items-center space-x-2 py-1.5 pl-4 pr-2 rounded-full border transition-colors ${
+                  isProfileDropdownOpen 
+                    ? 'border-primary bg-primary/10 text-primary' 
+                    : 'border-outline-variant hover:bg-surface-container text-on-surface'
+                }`}
+              >
+                <span className="font-label-caps text-label-caps px-1">{user?.name || 'PROFILE'}</span>
+                <div className="w-7 h-7 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center font-bold text-xs">
+                  {user?.name?.[0]?.toUpperCase() || 'A'}
+                </div>
+              </button>
+
+              {isProfileDropdownOpen && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setIsProfileDropdownOpen(false)}></div>
+                  <div className="absolute right-0 mt-2 w-48 bg-surface rounded-xl shadow-lg border border-outline-variant z-50 overflow-hidden">
+                    <div className="py-1">
+                      <NavLink
+                        to="/profile"
+                        onClick={() => setIsProfileDropdownOpen(false)}
+                        className="flex items-center px-4 py-2 text-sm text-on-surface hover:bg-surface-container transition-colors"
+                      >
+                        <span className="material-symbols-outlined mr-2 text-[18px]">person</span>
+                        Profile
+                      </NavLink>
+                      <button
+                        onClick={() => { setIsProfileDropdownOpen(false); handleLogout(); }}
+                        className="flex items-center w-full px-4 py-2 text-sm text-error hover:bg-error/10 transition-colors text-left"
+                      >
+                        <span className="material-symbols-outlined mr-2 text-[18px]">logout</span>
+                        Log out
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
         </header>
-        <div className="flex-1 overflow-y-auto p-8 relative">
+
+        {/* Dynamic Content */}
+        <main className="flex-1 p-container-padding space-y-container-padding">
           <Outlet />
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   );
 }

@@ -17,6 +17,8 @@ router.post('/auth/login', authCtrl.login);
 // Protected routes
 router.use(authenticate);
 
+router.get('/auth/me', authCtrl.getMe);
+router.put('/auth/me', authCtrl.updateMe);
 // Admin only routes
 router.post('/auth/employee', authorizeRoles('admin'), authCtrl.createEmployee);
 router.get('/auth/employee', authorizeRoles('admin'), authCtrl.getEmployees);

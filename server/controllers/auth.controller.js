@@ -11,7 +11,7 @@ exports.login = async (req, res) => {
     }
 
     const user = await User.findOne({
-      $or: [{ email: identifier }, { mobile: identifier }]
+      $or: [{ email: identifier }, { mobile: identifier }, { employeeId: identifier }]
     });
 
     if (!user) {
@@ -156,6 +156,55 @@ exports.assignVillages = async (req, res) => {
     }
     
     res.json({ message: 'Villages assigned successfully.', employee: user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
+exports.getMe = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select('-password');
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    res.json(user);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
+exports.updateMe = async (req, res) => {
+  const { name, email, mobile, password } = req.body;
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    if (email && email !== user.email) {
+      const existing = await User.findOne({ email });
+      if (existing) return res.status(400).json({ error: 'Email already in use.' });
+      user.email = email;
+    }
+    
+    if (mobile && mobile !== user.mobile) {
+      const existing = await User.findOne({ mobile });
+      if (existing) return res.status(400).json({ error: 'Mobile already in use.' });
+      user.mobile = mobile;
+    }
+
+    if (name) user.name = name;
+
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(password, salt);
+    }
+
+    await user.save();
+    const updatedUser = await User.findById(req.user._id).select('-password');
+    res.json({ message: 'Profile updated successfully.', user: updatedUser });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Server error' });

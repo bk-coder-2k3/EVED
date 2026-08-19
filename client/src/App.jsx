@@ -2,15 +2,19 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import DashboardLayout from './layouts/DashboardLayout';
-import Dashboard from './pages/Dashboard';
-import DataExtraction from './pages/DataExtraction';
-import VoterList from './pages/VoterList';
-import VoterDetails from './pages/VoterDetails';
-import TemplateEditor from './pages/TemplateEditor';
+import EmployeeLayout from './layouts/EmployeeLayout';
+import Dashboard from './pages/admin/Dashboard';
+import DataExtraction from './pages/admin/DataExtraction';
+import VoterList from './pages/admin/VoterList';
+import VoterDetails from './pages/admin/VoterDetails';
+import TemplateEditor from './pages/admin/TemplateEditor';
 import Login from './pages/Login';
-import EmployeeManagement from './pages/EmployeeManagement';
-import EmployeeDashboard from './pages/EmployeeDashboard';
-import HierarchyManager from './pages/HierarchyManager';
+import EmployeeManagement from './pages/admin/EmployeeManagement';
+import HierarchyManager from './pages/admin/HierarchyManager';
+import Profile from './pages/admin/Profile';
+import EmployeeDashboard from './pages/employee/EmployeeDashboard';
+import EmployeeVoters from './pages/employee/EmployeeVoters';
+import EmployeeProfile from './pages/employee/EmployeeProfile';
 
 function App() {
   return (
@@ -27,15 +31,19 @@ function App() {
               <Route path="extraction" element={<DataExtraction />} />
               <Route path="voters" element={<VoterList />} />
               <Route path="voters/:id" element={<VoterDetails />} />
-              {/* <Route path="settings" element={<TemplateEditor />} /> */}
               <Route path="employees" element={<EmployeeManagement />} />
               <Route path="hierarchy" element={<HierarchyManager />} />
+              <Route path="profile" element={<Profile />} />
             </Route>
           </Route>
 
           {/* Employee Routes */}
           <Route element={<ProtectedRoute allowedRoles={['employee']} />}>
-            <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
+            <Route path="/" element={<EmployeeLayout />}>
+              <Route path="employee-dashboard" element={<EmployeeDashboard />} />
+              <Route path="employee-voters" element={<EmployeeVoters />} />
+              <Route path="employee-profile" element={<EmployeeProfile />} />
+            </Route>
           </Route>
 
           <Route path="*" element={<Navigate to="/login" replace />} />

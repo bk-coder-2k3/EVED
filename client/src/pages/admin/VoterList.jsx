@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import api, { getImageUrl } from '../api';
+import api, { getImageUrl } from '../../api/api';
 import { Search, ChevronLeft, ChevronRight, Edit, MapPin, X, Check, ArrowUpDown, ArrowUp, ArrowDown, Filter } from 'lucide-react';
 
 export default function VoterList() {
@@ -186,27 +186,27 @@ export default function VoterList() {
 
   return (
     <div className="max-w-7xl mx-auto flex flex-col h-full relative">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-slate-900 dark:text-white flex items-center">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+        <h1 className="text-3xl font-bold text-slate-900 flex items-center">
           Voter Directory
           {selectedVoters.size > 0 && (
-            <span className="ml-4 text-sm font-medium bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300 px-3 py-1 rounded-full">
+            <span className="ml-4 text-sm font-medium bg-primary/10 text-primary px-3 py-1 rounded-full">
               {selectedVoters.size} Selected
             </span>
           )}
         </h1>
-        <div className="flex items-center space-x-3">
+        <div className="flex flex-wrap items-center gap-3">
           {selectedVoters.size > 0 && (
             <button 
               onClick={() => setIsModalOpen(true)}
-              className="btn-primary py-2 flex items-center shadow-lg transform hover:scale-105 transition-all"
+              className="px-4 py-2 font-medium bg-primary text-on-primary hover:bg-primary/90 rounded-xl flex items-center transition-colors shadow-sm"
             >
-              <MapPin className="w-4 h-4 mr-2" /> Assign Village
+              <span className="material-symbols-outlined text-[18px] mr-2">location_on</span> Assign Village
             </button>
           )}
           <button 
             onClick={() => setShowFilters(!showFilters)}
-            className={`px-4 py-2 rounded-xl border flex items-center transition-colors ${showFilters ? 'bg-indigo-50 border-indigo-200 text-indigo-700 dark:bg-indigo-900/30 dark:border-indigo-800 dark:text-indigo-400' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-700'}`}
+            className={`px-4 py-2 rounded-xl border flex items-center transition-colors ${showFilters ? 'bg-primary/10 border-primary/20 text-primary ' : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'}`}
           >
             <Filter className="w-4 h-4 mr-2" /> Filters
           </button>
@@ -215,7 +215,7 @@ export default function VoterList() {
 
       {/* Advanced Filters Panel */}
       {showFilters && (
-        <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 mb-4 animate-in fade-in slide-in-from-top-4 duration-200">
+        <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 mb-4 animate-in fade-in slide-in-from-top-4 duration-200">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Search</label>
@@ -259,80 +259,80 @@ export default function VoterList() {
         </div>
       )}
 
-      <div className="glass-panel flex-1 flex flex-col overflow-hidden relative shadow-sm border border-slate-200 dark:border-slate-700 rounded-xl">
+      <div className="glass-panel flex-1 flex flex-col overflow-hidden relative shadow-sm border border-slate-200 rounded-xl">
         <div className="flex-1 overflow-auto">
           <table className="w-full text-left text-sm whitespace-nowrap">
-            <thead className="bg-slate-50 dark:bg-slate-800/80 sticky top-0 z-10 shadow-sm backdrop-blur-md">
+            <thead className="bg-slate-50 sticky top-0 z-10 shadow-sm backdrop-blur-md">
               <tr>
-                <th className="px-4 py-3 font-medium text-slate-500 w-10 border-b border-slate-200 dark:border-slate-700">
+                <th className="px-4 py-3 font-medium text-slate-500 w-10 border-b border-slate-200 ">
                   <input 
                     type="checkbox" 
-                    className="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500 cursor-pointer"
+                    className="w-4 h-4 text-primary rounded border-outline-variant focus:ring-primary cursor-pointer"
                     checked={isAllOnPageSelected}
                     onChange={toggleSelectAll}
                   />
                 </th>
-                <th className="px-4 py-3 font-medium text-slate-500 border-b border-slate-200 dark:border-slate-700">Photo</th>
-                <th className="px-4 py-3 font-medium text-slate-500 border-b border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors select-none" onClick={() => handleSort('serialNumber')}>
+                <th className="px-4 py-3 font-medium text-slate-500 border-b border-slate-200 ">Photo</th>
+                <th className="px-4 py-3 font-medium text-slate-500 border-b border-slate-200 cursor-pointer hover:bg-slate-100 :bg-slate-700 transition-colors select-none" onClick={() => handleSort('serialNumber')}>
                   <div className="flex items-center">Serial No. {renderSortIcon('serialNumber')}</div>
                 </th>
-                <th className="px-4 py-3 font-medium text-slate-500 border-b border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors select-none" onClick={() => handleSort('epicNumber')}>
+                <th className="px-4 py-3 font-medium text-slate-500 border-b border-slate-200 cursor-pointer hover:bg-slate-100 :bg-slate-700 transition-colors select-none" onClick={() => handleSort('epicNumber')}>
                   <div className="flex items-center">EPIC No. {renderSortIcon('epicNumber')}</div>
                 </th>
-                <th className="px-4 py-3 font-medium text-slate-500 border-b border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors select-none" onClick={() => handleSort('name')}>
+                <th className="px-4 py-3 font-medium text-slate-500 border-b border-slate-200 cursor-pointer hover:bg-slate-100 :bg-slate-700 transition-colors select-none" onClick={() => handleSort('name')}>
                   <div className="flex items-center">Name {renderSortIcon('name')}</div>
                 </th>
-                <th className="px-4 py-3 font-medium text-slate-500 border-b border-slate-200 dark:border-slate-700">Village</th>
-                <th className="px-4 py-3 font-medium text-slate-500 border-b border-slate-200 dark:border-slate-700">Relation</th>
-                <th className="px-4 py-3 font-medium text-slate-500 border-b border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors select-none" onClick={() => handleSort('houseNumber')}>
+                <th className="px-4 py-3 font-medium text-slate-500 border-b border-slate-200 ">Village</th>
+                <th className="px-4 py-3 font-medium text-slate-500 border-b border-slate-200 ">Relation</th>
+                <th className="px-4 py-3 font-medium text-slate-500 border-b border-slate-200 cursor-pointer hover:bg-slate-100 :bg-slate-700 transition-colors select-none" onClick={() => handleSort('houseNumber')}>
                   <div className="flex items-center">House No. {renderSortIcon('houseNumber')}</div>
                 </th>
-                <th className="px-4 py-3 font-medium text-slate-500 border-b border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors select-none" onClick={() => handleSort('age')}>
+                <th className="px-4 py-3 font-medium text-slate-500 border-b border-slate-200 cursor-pointer hover:bg-slate-100 :bg-slate-700 transition-colors select-none" onClick={() => handleSort('age')}>
                   <div className="flex items-center">Age / Gender {renderSortIcon('age')}</div>
                 </th>
-                <th className="px-4 py-3 font-medium text-slate-500 border-b border-slate-200 dark:border-slate-700">Action</th>
+                <th className="px-4 py-3 font-medium text-slate-500 border-b border-slate-200 ">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+            <tbody className="divide-y divide-slate-100 ">
               {voters.map(voter => (
                 <tr 
                   key={voter._id} 
-                  className={`hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors ${selectedVoters.has(voter._id) ? 'bg-indigo-50/50 dark:bg-indigo-900/10' : ''}`}
+                  className={`hover:bg-slate-50 :bg-slate-800/50 transition-colors ${selectedVoters.has(voter._id) ? 'bg-primary/5 ' : ''}`}
                 >
                   <td className="px-4 py-2">
                     <input 
                       type="checkbox" 
-                      className="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500 cursor-pointer"
+                      className="w-4 h-4 text-primary rounded border-outline-variant focus:ring-primary cursor-pointer"
                       checked={selectedVoters.has(voter._id)}
                       onChange={() => toggleSelectVoter(voter._id)}
                     />
                   </td>
-                  <td className="px-6 py-4 border-b border-slate-100 dark:border-slate-700/50">
+                  <td className="px-6 py-4 border-b border-slate-100 ">
                     {voter.photo ? (
                       <img src={getImageUrl(voter.photo)} alt="voter" className="w-10 h-12 object-cover rounded-md shadow-sm bg-slate-200" />
                     ) : (
-                      <div className="w-10 h-12 bg-slate-200 dark:bg-slate-700 rounded-md"></div>
+                      <div className="w-10 h-12 bg-slate-200 rounded-md"></div>
                     )}
                   </td>
                   <td className="px-4 py-2 font-medium">{voter.serialNumber}</td>
-                  <td className="px-4 py-2 text-indigo-600 dark:text-indigo-400 font-semibold">{voter.epicNumber}</td>
-                  <td className="px-4 py-2 font-medium text-slate-900 dark:text-slate-100">
+                  <td className="px-4 py-2 text-primary font-semibold">{voter.epicNumber}</td>
+                  <td className="px-4 py-2 font-medium text-slate-900 ">
                     {voter.name}
                   </td>
                   <td className="px-4 py-2">
                     {voter.locationId ? (
-                      <span className="inline-flex items-center px-2 py-1 rounded bg-emerald-50 text-emerald-700 text-xs font-medium dark:bg-emerald-900/30 dark:text-emerald-400">
+                      <span className="inline-flex items-center px-2 py-1 rounded bg-emerald-50 text-emerald-700 text-xs font-medium ">
                         {voter.locationId.village}
                       </span>
                     ) : (
                       <span className="text-slate-400 text-xs italic">Unassigned</span>
                     )}
                   </td>
-                  <td className="px-4 py-2 text-slate-600 dark:text-slate-400">{voter.relationName} <span className="text-xs opacity-60">({voter.relationType})</span></td>
+                  <td className="px-4 py-2 text-slate-600 ">{voter.relationName} <span className="text-xs opacity-60">({voter.relationType})</span></td>
                   <td className="px-4 py-2 font-medium">{voter.houseNumber}</td>
                   <td className="px-4 py-2">{voter.age} / {voter.gender}</td>
                   <td className="px-4 py-2">
-                    <Link to={`/voters/${voter._id}`} className="p-2 text-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 rounded-lg inline-block transition-colors">
+                    <Link to={`/voters/${voter._id}`} className="p-2 text-primary/80 hover:text-primary hover:bg-primary/5 rounded-lg inline-block transition-colors">
                       <Edit className="w-4 h-4" />
                     </Link>
                   </td>
@@ -343,7 +343,7 @@ export default function VoterList() {
         </div>
         
         {/* Pagination */}
-        <div className="border-t border-slate-200 dark:border-slate-800 p-4 flex items-center justify-between bg-white dark:bg-slate-900 rounded-b-xl">
+        <div className="border-t border-slate-200 p-4 flex items-center justify-between bg-white rounded-b-xl">
           <p className="text-sm text-slate-500">Showing {voters.length > 0 ? (page - 1) * limit + 1 : 0} to {Math.min(page * limit, total)} of {total} entries</p>
           <div className="flex space-x-2">
             <button 
@@ -353,7 +353,7 @@ export default function VoterList() {
             >
               <ChevronLeft className="w-4 h-4 mr-1" /> Prev
             </button>
-            <span className="py-1 px-3 text-sm font-medium border border-transparent bg-slate-50 dark:bg-slate-800 rounded-lg flex items-center justify-center min-w-[3rem]">{page}</span>
+            <span className="py-1 px-3 text-sm font-medium border border-transparent bg-slate-50 rounded-lg flex items-center justify-center min-w-[3rem]">{page}</span>
             <button 
               disabled={page >= totalPages} 
               onClick={() => setPage(p => p + 1)}
@@ -367,79 +367,71 @@ export default function VoterList() {
 
       {/* Assignment Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden border border-slate-200 dark:border-slate-800">
-            <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
-              <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center">
-                <MapPin className="w-5 h-5 mr-2 text-indigo-500" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+          <div className="bg-surface rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col border border-outline-variant">
+            <div className="p-5 border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+              <h2 className="text-lg font-bold text-on-surface flex items-center">
+                <span className="material-symbols-outlined mr-2 text-primary">location_on</span>
                 Assign Village to {selectedVoters.size} Voters
               </h2>
-              <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-slate-600 transition-colors">
-                <X className="w-5 h-5" />
+              <button onClick={() => setIsModalOpen(false)} className="text-on-surface-variant hover:text-on-surface transition-colors">
+                <span className="material-symbols-outlined">close</span>
               </button>
             </div>
             
-            <div className="p-6 space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Zonal</label>
-                <select value={selZonal} onChange={handleZonalChange} className="input-field" disabled={assigning}>
-                  <option value="">Select Zonal</option>
-                  {zonals.map(z => <option key={z} value={z}>{z}</option>)}
-                </select>
+            <div className="p-6">
+              <label className="block text-sm text-on-surface-variant mb-1">Zonal</label>
+              <select value={selZonal} onChange={handleZonalChange} className="w-full px-3 py-2.5 rounded-lg border border-outline-variant bg-surface focus:ring-2 focus:ring-primary outline-none transition-shadow text-on-surface mb-4" disabled={assigning}>
+                <option value="">Select Zonal</option>
+                {zonals.map(z => <option key={z} value={z}>{z}</option>)}
+              </select>
+              
+              <label className="block text-sm text-on-surface-variant mb-1">Taluk</label>
+              <select value={selTaluk} onChange={handleTalukChange} className="w-full px-3 py-2.5 rounded-lg border border-outline-variant bg-surface focus:ring-2 focus:ring-primary outline-none transition-shadow text-on-surface mb-4" disabled={!selZonal || assigning}>
+                <option value="">Select Taluk</option>
+                {taluks.map(t => <option key={t} value={t}>{t}</option>)}
+              </select>
+              
+              <label className="block text-sm text-on-surface-variant mb-1">Gram Panchayat</label>
+              <select value={selGram} onChange={handleGramChange} className="w-full px-3 py-2.5 rounded-lg border border-outline-variant bg-surface focus:ring-2 focus:ring-primary outline-none transition-shadow text-on-surface mb-4" disabled={!selTaluk || assigning}>
+                <option value="">Select Gram</option>
+                {grams.map(g => <option key={g} value={g}>{g}</option>)}
+              </select>
+              
+              <label className="block text-sm text-on-surface-variant mb-1">Booth</label>
+              <select value={selBooth} onChange={handleBoothChange} className="w-full px-3 py-2.5 rounded-lg border border-outline-variant bg-surface focus:ring-2 focus:ring-primary outline-none transition-shadow text-on-surface mb-4" disabled={!selGram || assigning}>
+                <option value="">Select Booth</option>
+                {booths.map(b => <option key={b} value={b}>{b}</option>)}
+              </select>
+              
+              <label className="block text-sm text-on-surface-variant mb-1">Village</label>
+              <select value={selLocationId} onChange={handleVillageChange} className="w-full px-3 py-2.5 rounded-lg border border-outline-variant bg-surface focus:ring-2 focus:ring-primary outline-none transition-shadow text-on-surface mb-6" disabled={!selBooth || assigning}>
+                <option value="">Select Village</option>
+                {villages.map(v => <option key={v._id} value={v._id}>{v.village}</option>)}
+              </select>
+              
+              <div className="flex justify-end gap-3 pt-2">
+                <button 
+                  onClick={() => setIsModalOpen(false)}
+                  className="px-4 py-2 font-medium text-on-surface-variant hover:bg-surface-container rounded-lg transition-colors"
+                  disabled={assigning}
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={handleAssignSubmit}
+                  disabled={!selLocationId || assigning}
+                  className="px-4 py-2 font-medium bg-primary text-on-primary hover:bg-primary/90 rounded-lg transition-colors shadow-sm disabled:opacity-50 flex items-center"
+                >
+                  {assigning ? (
+                    'Assigning...'
+                  ) : (
+                    <>
+                      <span className="material-symbols-outlined text-[18px] mr-2">check</span> Confirm Assignment
+                    </>
+                  )}
+                </button>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Taluk</label>
-                <select value={selTaluk} onChange={handleTalukChange} className="input-field" disabled={!selZonal || assigning}>
-                  <option value="">Select Taluk</option>
-                  {taluks.map(t => <option key={t} value={t}>{t}</option>)}
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Gram Panchayat</label>
-                <select value={selGram} onChange={handleGramChange} className="input-field" disabled={!selTaluk || assigning}>
-                  <option value="">Select Gram</option>
-                  {grams.map(g => <option key={g} value={g}>{g}</option>)}
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Booth</label>
-                <select value={selBooth} onChange={handleBoothChange} className="input-field" disabled={!selGram || assigning}>
-                  <option value="">Select Booth</option>
-                  {booths.map(b => <option key={b} value={b}>{b}</option>)}
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Village</label>
-                <select value={selLocationId} onChange={handleVillageChange} className="input-field border-indigo-300 focus:ring-indigo-500" disabled={!selBooth || assigning}>
-                  <option value="">Select Village</option>
-                  {villages.map(v => <option key={v._id} value={v._id}>{v.village}</option>)}
-                </select>
-              </div>
-            </div>
-
-            <div className="p-6 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/30 flex justify-end space-x-3">
-              <button 
-                onClick={() => setIsModalOpen(false)}
-                className="px-4 py-2 text-slate-600 font-medium hover:bg-slate-200 dark:text-slate-400 dark:hover:bg-slate-800 rounded-xl transition-colors"
-                disabled={assigning}
-              >
-                Cancel
-              </button>
-              <button 
-                onClick={handleAssignSubmit}
-                disabled={!selLocationId || assigning}
-                className={`px-6 py-2 rounded-xl text-white font-medium flex items-center transition-all ${
-                  !selLocationId || assigning ? 'bg-slate-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700 shadow-md'
-                }`}
-              >
-                {assigning ? (
-                  'Assigning...'
-                ) : (
-                  <>
-                    <Check className="w-4 h-4 mr-2" /> Confirm Assignment
-                  </>
-                )}
-              </button>
             </div>
           </div>
         </div>
