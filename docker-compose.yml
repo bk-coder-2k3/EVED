@@ -27,8 +27,24 @@ services:
   frontend:
     build:
       context: ./client
-    ports:
-      - "80:80"
     depends_on:
       - backend
     restart: unless-stopped
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - frontend
+    command: caddy reverse-proxy --from ${DOMAIN:-evde-test.duckdns.org} --to frontend:80
+
+volumes:
+  caddy_data:
+  caddy_config:
